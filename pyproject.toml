@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "anvil-web3"
 authors = [{name = "alpinevm"}]
-homepage = "https://github.com/alpinevm/anvil-web3"
+home-page = "https://github.com/alpinevm/anvil-web3"
 readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
