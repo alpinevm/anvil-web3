@@ -11,8 +11,8 @@ python3 -m pip install anvil-web3
 This example shows how to programatically create an Anvil chain and how to inject the anvil rpc methods to a
 web3.py `Web3` object:
 ```python
-from web3 import Web3
-from anvil_web3 import anvil, AnvilWeb3
+from web3 import Web3, HTTPProvider
+from anvil_web3 import anvil, AnvilWeb3, AnvilInstance
 
 # create an anvil chain
 instance = AnvilInstance(
