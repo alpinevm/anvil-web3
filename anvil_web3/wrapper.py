@@ -1,4 +1,6 @@
 from typing import Any, Union, Dict, Callable, cast, Optional
+import sys
+import atexit
 import json
 import os
 from typing_extensions import Unpack
@@ -10,8 +12,7 @@ from .types import AnvilConfig, AnvilConfigInstance
 import time
 import requests
 import traceback
-
-# import psutil
+import signal
 
 
 class AnvilInstance:
@@ -24,7 +25,6 @@ class AnvilInstance:
         *,
         supress_anvil_output: bool = True,
         liveliness_timeout: int = 60,
-        auto_exit: bool = True,
         **config: Unpack[AnvilConfig],
     ):
         self.config: Union[AnvilConfigInstance, dict] = {}
@@ -53,12 +53,6 @@ class AnvilInstance:
                     self.cli_config.extend([f"--{fmt_key}", str(value)])
         self.liveliness_timeout = liveliness_timeout
 
-        if auto_exit:
-            # TODO: Implement auto exit
-            # Potentially:
-            # Attach a signal listener (running in a different subprocess)
-            # to the parent PID, then killing the anvil process on SIGTERM/SIGKILL
-            self.parent_pid = os.getpid()
 
         self.anvil_process = subprocess.Popen(
             ["anvil"] + self.cli_config,
@@ -66,7 +60,18 @@ class AnvilInstance:
             stderr=subprocess.DEVNULL if supress_anvil_output else None,
         )
 
+        def exit_handler():
+            self.anvil_process.terminate()
+
+        def kill_handler(*_):
+            sys.exit(0)
+
+        atexit.register(exit_handler)
+        signal.signal(signal.SIGINT, kill_handler)
+        signal.signal(signal.SIGTERM, kill_handler)
+
         self._wait_until_live()
+
 
     @property
     def url(self):
@@ -81,6 +86,7 @@ class AnvilInstance:
         return f"ws://{self.url}"
 
     def kill(self):
+        print("KILLLING!")
         self.anvil_process.terminate()
 
     @staticmethod
