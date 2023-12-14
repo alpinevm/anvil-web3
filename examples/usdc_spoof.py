@@ -1,4 +1,4 @@
-# Use chain state forking + storage manipulation to fake being USDC rich
+# Use storage manipulation to fake being USDC rich
 from eth_account.signers.local import (
     LocalAccount,
 )

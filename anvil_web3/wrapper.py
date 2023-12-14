@@ -1,17 +1,12 @@
-from typing import Any, Union, Dict, Callable, cast, Optional
+from typing import Union, Dict, Callable
 import sys
 import atexit
-import json
-import os
 from typing_extensions import Unpack
 import subprocess
 import socket
-from web3 import Web3, HTTPProvider
-from web3.types import Wei
 from .types import AnvilConfig, AnvilConfigInstance
 import time
 import requests
-import traceback
 import signal
 
 
@@ -53,7 +48,6 @@ class AnvilInstance:
                     self.cli_config.extend([f"--{fmt_key}", str(value)])
         self.liveliness_timeout = liveliness_timeout
 
-
         self.anvil_process = subprocess.Popen(
             ["anvil"] + self.cli_config,
             stdout=subprocess.DEVNULL if supress_anvil_output else None,
@@ -72,7 +66,6 @@ class AnvilInstance:
 
         self._wait_until_live()
 
-
     @property
     def url(self):
         return f"{self.config['host']}:{self.config['port']}"
@@ -86,7 +79,6 @@ class AnvilInstance:
         return f"ws://{self.url}"
 
     def kill(self):
-        print("KILLLING!")
         self.anvil_process.terminate()
 
     @staticmethod
@@ -95,10 +87,6 @@ class AnvilInstance:
             s.bind(("", 0))  # Bind to a port assigned by the kernel
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             return str(s.getsockname()[1])
-
-    @staticmethod
-    def _consume_error(error):
-        pass
 
     def _wait_until_live(self):
         end_time = time.time() + self.liveliness_timeout
