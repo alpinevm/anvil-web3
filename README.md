@@ -66,7 +66,7 @@ WIP
 - [ ] evm_snapshot
 - [ ] evm_revert
 - [ ] evm_increaseTime
-- [ ] evm_setNextBlockTimestamp
+- [x] evm_setNextBlockTimestamp
 - [ ] anvil_setBlockTimestampInterval
 - [ ] evm_setBlockGasLimit
 - [ ] anvil_removeBlockTimestampInterval
