@@ -219,6 +219,14 @@ class Anvil(Module):
     def set_storage_at(self, address: ValidAddress, slot: int, val: ValidBytes) -> bool:
         return self._set_storage_at(address, slot, val)
 
+    _set_next_block_timestamp: AnvilMethod[Callable[[int], None]] = AnvilMethod(
+        AnvilRPC.evm_setNextBlockTimestamp
+    )
+
+    # evm_setNextBlockTimestamp
+    def set_next_block_timestamp(self, timestamp: int) -> None:
+        return self._set_next_block_timestamp(timestamp)
+
 
 class AnvilWeb3(Web3):
     anvil: Anvil

@@ -3,4 +3,4 @@ from .wrapper import AnvilInstance
 from .anvil import AnvilWeb3, anvil
 from .types import AnvilConfig, Forking
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
